@@ -9,8 +9,7 @@ import * as Scenes_MarioKartDoubleDash from './j3d/mkdd_scenes.js';
 import * as Scenes_ZeldaWindWaker from './ZeldaWindWaker/Main.js';
 import * as Scenes_SuperMarioSunshine from './j3d/sms_scenes.js';
 import * as Scenes_Pikmin2 from './j3d/pik2_scenes.js';
-import * as Scenes_SuperMarioGalaxy1 from './SuperMarioGalaxy/Scenes_SuperMarioGalaxy1.js';
-import * as Scenes_SuperMarioGalaxy2 from './SuperMarioGalaxy/Scenes_SuperMarioGalaxy2.js';
+import * as Scenes_SuperMarioGalaxy from './SuperMarioGalaxy/Scenes.js';
 import * as Scenes_SuperMario64DS from './SuperMario64DS/scenes.js';
 import * as Scenes_Zelda_OcarinaOfTime from './zelview/scenes.js';
 import * as Scenes_Zelda_OcarinaOfTime_Beta from './zelview/scenes_beta.js';
@@ -137,8 +136,8 @@ const sceneGroups: (string | SceneGroup)[] = [
     Scenes_Klonoa.sceneGroup,
     Scenes_Zelda_SkywardSword.sceneGroup,
     Scenes_Okami.sceneGroup,
-    Scenes_SuperMarioGalaxy1.sceneGroup,
-    Scenes_SuperMarioGalaxy2.sceneGroup,
+    Scenes_SuperMarioGalaxy.smg1SceneGroup,
+    Scenes_SuperMarioGalaxy.smg2SceneGroup,
     Scenes_SuperPaperMario.sceneGroup,
     Scenes_SuperSmashBrosBrawl.sceneGroup,
     Scenes_WiiSports.sceneGroup,
@@ -1004,7 +1003,12 @@ class Main {
         window.dispatchEvent(new Event('loadNewScene'));
 
         this.loadingSceneDesc = sceneDesc;
-        const promise = sceneDesc.createScene(device, context);
+        let promise: PromiseLike<SceneGfx> | null = null;
+        if (sceneDesc.createScene) {
+            promise = sceneDesc.createScene(device, context);
+        } else if (sceneGroup.createScene) {
+            promise = sceneGroup.createScene(device, context, sceneDesc.id);
+        }
 
         if (promise === null) {
             console.error(`Cannot load ${sceneDesc.id}. Probably an unsupported file extension.`);

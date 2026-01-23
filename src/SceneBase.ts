@@ -33,7 +33,7 @@ export interface SceneContext {
 export interface SceneDesc {
     id: string;
     name: string;
-    createScene(device: GfxDevice, sceneContext: SceneContext): PromiseLike<SceneGfx>;
+    createScene?(device: GfxDevice, sceneContext: SceneContext): PromiseLike<SceneGfx>;
 }
 
 export interface SceneGroup {
@@ -43,4 +43,5 @@ export interface SceneGroup {
     sceneIdMap?: Map<string, string>;
     hidden?: boolean;
     altName?: string;
+    createScene?(device: GfxDevice, sceneContext: SceneContext, sceneId: string): PromiseLike<SceneGfx>;
 }

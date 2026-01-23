@@ -1867,21 +1867,11 @@ class StageDataHolder {
     }
 }
 
-export abstract class SMGSceneDescBase implements Viewer.SceneDesc {
-    public id: string;
+export abstract class SMGSceneDescBase {
     public pathBase: string;
     public gameBit: GameBits;
 
-    constructor(public name: string, public galaxyName: string, public scenarioOverride: number | null = null, id: string | null = null) {
-        if (id !== null) {
-            this.id = id;
-        } else {
-            if (this.scenarioOverride !== null)
-                this.id = `${this.galaxyName}${this.scenarioOverride}`;
-            else
-                this.id = this.galaxyName;
-        }
-    }
+    constructor(public galaxyName: string, public scenarioOverride: number | null = null) {}
 
     public abstract getLightData(modelCache: ModelCache): JMapInfoIter;
     public abstract getZoneLightData(modelCache: ModelCache, zoneName: string): JMapInfoIter;
